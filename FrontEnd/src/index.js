@@ -10,9 +10,9 @@ import store from "./store/store";
 
 ReactDOM.render(
       <Provider store={store}>
-      <GlobalStyle />
-      <GlobalIcon />
-      <App />
+            <GlobalStyle />
+            <GlobalIcon />
+            <App />
       </Provider>,
   document.getElementById('root')
 );
