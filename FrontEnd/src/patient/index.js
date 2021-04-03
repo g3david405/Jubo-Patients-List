@@ -87,8 +87,8 @@ export default function Patient(){
                                     <DialogTextarea value={updateText} onChange={
                                         (e)=>{setUpdateText(e.target.value)}}>
                                     </DialogTextarea>:
-                                    orders.Message?orders.Message.split("\n").map((item)=>{
-                                        return (<p>{item}</p>)
+                                    orders.Message?orders.Message.split("\n").map((item,index)=>{
+                                        return (<p key={index}>{item}</p>)
                                     }):"(暫無醫囑)"}
                             </Fragment>}
                     </DialogContent>
