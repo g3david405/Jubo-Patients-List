@@ -18,7 +18,7 @@ const PatientModelSchema = new Schema({
     OrderId: Number
   },
     {
-      versionKey: false
+      versionKey: false //不生成"__v"欄位
     });
 const Patient = mongoose.model('Patient', PatientModelSchema );
 const OrdersModelSchema = new Schema({
@@ -26,16 +26,16 @@ const OrdersModelSchema = new Schema({
      Message: String
   },
     {
-      versionKey: false
+      versionKey: false //不生成"__v"欄位
     });
 const Orders = mongoose.model("Order",OrdersModelSchema);
 
 //僅允許本地端口號3000access資源
 const corsOptions = {
   origin: [
-    'http://localhost:3000',
+    'http://localhost:3000', //允許請求的來源列表
   ],
-  methods: 'GET,PUT,PATCH,POST,DELETE'
+  methods: 'GET,PUT,PATCH,POST,DELETE' //允許請求的方法
 };
 app.use(cors(corsOptions))
 
@@ -44,12 +44,14 @@ app.use(express.json())
 
 //取得單個病人的醫囑(點擊列表時觸發)
 app.get("/orders",(async (req, res) => {
-    const id = req.query.id
-    const orders = await Orders.find({Id:id}).exec();
+    const id = req.query.id //獲取url中帶的orderID參數
+    const orders = await Orders.find({Id:id}).exec(); //exec為異步函數，需await等待執行完成
     if(orders.length > 0) {
+        //如果有找到order，返回order值
         res.send({orders: orders[0]});
     }
     else{
+        //未找到order，空字符串
         res.send({orders: {Message:""}});
     }
 }))
@@ -59,7 +61,9 @@ app.post("/orders",(req, res) => {
   const request = req.body;
   const message = request.message;
   const Id = request.Id;
-  Orders.create({Id:Id,Message:message});
+  Orders.create({
+      Id:Id,
+      Message:message});
   res.send({"code":"100"})
 })
 
@@ -68,8 +72,9 @@ app.patch("/orders",async (req,res)=>{
     const request = req.body;
     const orderID = request.Id;
     const updateContent = request.updateContent;
-    const orders = await Orders.find({Id:orderID}).exec();
+    const orders = await Orders.find({Id:orderID}).exec(); //exec為異步函數，需await等待執行完成
     if(orders.length > 0) {
+        //若有找到對應order，則更新
         Orders.updateOne({Id: orderID}, {Message: updateContent}, function (err) {
             if (err) {
                 res.send(err)
@@ -77,7 +82,8 @@ app.patch("/orders",async (req,res)=>{
         })
     }
     else{
-        Orders.create({Id:orderID,Message:updateContent});
+        //若未找到對應order，則創建新的order
+        Orders.create({Id: orderID, Message: updateContent});
     }
     res.send(request);
 })
@@ -93,8 +99,9 @@ app.post("/patient",(req,res)=>{
   const name = req.body.name;
   const id = req.body.id;
   const orderId = req.body.orderId;
-  Patient.create({Name:name,Id:id,OrderId:orderId}
-  );
+  Patient.create({
+      Name:name,Id:id,
+      OrderId:orderId});
   res.send({"code":"100"})
 })
 
