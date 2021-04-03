@@ -69,6 +69,7 @@ export default function Patient(){
 
     return(
         <ContentWrapper>
+            {/*醫囑詳細資訊*/}
             <Dialog open={showDialog}>
                 <DialogWrapper>
                     <DialogTitle>{patientName} 的醫囑
@@ -114,6 +115,7 @@ export default function Patient(){
                     </Button>
                 </DialogActions>
             </Dialog>
+            {/*病人列表*/}
                 <PatientTitle>
                     病人列表
                 </PatientTitle>
